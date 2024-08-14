@@ -3,13 +3,19 @@ package game;
 import java.util.Scanner;
 
 public class Game {
-    Scanner scan = new Scanner(System.in);
-    byte input;
-    byte rand;
+    private static final Scanner scan = new Scanner(System.in);
+    private byte input;
+    private byte rand;
 
-    boolean boxAvailable = false;
-    byte winner = 0;
-    char[] box = {'1', '2', '3', '4', '5', '6', '7', '8', '9'};
+    private boolean boxAvailable = false;
+    private byte winner = 0;
+    private char[] box = {'1', '2', '3', '4', '5', '6', '7', '8', '9'};
+
+    private final static int[][] winningCondition = {
+            {0, 1, 2}, {3, 4, 5}, {6, 7, 8},
+            {0, 3, 6}, {1, 4, 7}, {2, 5, 8},
+            {0, 4, 8}, {8, 4, 0}
+    };
 
     public void startGame() {
         System.out.println("Enter box number to select. Enjoy!\n");
@@ -57,7 +63,7 @@ public class Game {
         }
     }
 
-    public void printBoard() {
+    private void printBoard() {
         System.out.println("\n\n " + box[0] + " | " + box[1] + " | " + box[2] + " ");
         System.out.println("-----------");
         System.out.println(" " + box[3] + " | " + box[4] + " | " + box[5] + " ");
@@ -65,13 +71,13 @@ public class Game {
         System.out.println(" " + box[6] + " | " + box[7] + " | " + box[8] + " \n");
     }
 
-    public void cleanBoard() {
+    private void cleanBoard() {
         for (byte i = 0; i < 9; i++) {
             box[i] = ' ';
         }
     }
 
-    public void askForMove() {
+    private void askForMove() {
         while (true) {
             input = scan.nextByte();
             if (input > 0 && input < 10) {
@@ -87,7 +93,7 @@ public class Game {
     }
 
 
-    public void checkIfStillFreePlaces() {
+    private void checkIfStillFreePlaces() {
         for (byte i = 0; i < 9; i++) {
             if (box[i] != 'X' && box[i] != 'O') {
                 boxAvailable = true;
@@ -96,7 +102,7 @@ public class Game {
         }
     }
 
-    public void calculateNexBotMove() {
+    private void calculateNexBotMove() {
         while (true) {
             rand = (byte) (Math.random() * (9 - 1 + 1) + 1);
             if (box[rand - 1] != 'X' && box[rand - 1] != 'O') {
@@ -106,12 +112,7 @@ public class Game {
         }
     }
 
-    public boolean checkIfSomeBodyWon(char sign) {
-        int[][] winningCondition = {
-                {0, 1, 2}, {3, 4, 5}, {6, 7, 8},
-                {0, 3, 6}, {1, 4, 7}, {2, 5, 8},
-                {0, 4, 8}, {8, 4, 0}
-        };
+    private boolean checkIfSomeBodyWon(char sign) {
         for (int[] numbers : winningCondition) {
             if (box[numbers[0]] == sign && box[numbers[1]] == sign && box[numbers[2]] == sign) {
                 return true;
